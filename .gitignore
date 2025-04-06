@@ -1,15 +1,59 @@
+#*.iml
+#.gradle
+#/local.properties
+#/.idea/caches
+#/.idea/libraries
+#/.idea/modules.xml
+#/.idea/workspace.xml
+#/.idea/navEditor.xml
+#/.idea/assetWizardSettings.xml
+#.DS_Store
+#/build
+#/captures
+#.externalNativeBuild
+#.cxx
+#local.properties
+
+
+# Android Studio/IDEA
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.idea/
+.idea/*
+
+# Ignore specific files inside .idea (optional if using above)
+# /.idea/caches
+# /.idea/libraries
+# /.idea/modules.xml
+# /.idea/workspace.xml
+# /.idea/navEditor.xml
+# /.idea/assetWizardSettings.xml
+
+# Gradle
+.gradle/
+build/
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Local configs
 local.properties
+
+# macOS
+.DS_Store
+
+# Jetpack Compose (previews and caching)
+.compose-cache/
+
+# Keystore files
+*.jks
+*.keystore
+**/debug.keystore
+
+# Kotlin/Java build outputs
+*.class
+*.apk
+*.ap_
+*.dex
+
+# Logs
+*.log
