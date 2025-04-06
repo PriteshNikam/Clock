@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.developersphere.clock.R
 import com.developersphere.clock.presentation.screens.AlarmScreen
 import com.developersphere.clock.presentation.screens.ClockScreen
 import com.developersphere.clock.presentation.screens.StopWatchScreen
@@ -25,16 +26,16 @@ fun AppNavigation(navigationController: NavHostController) {
 }
 
 @Serializable
-sealed class Screen(val route: String, val icon:@Contextual ImageVector) {
+sealed class Screen(val route: String, val iconId: Int) {
     @Serializable
-    data object Alarm : Screen(route = "Alarm",icon  = Icons.Default.Home)
+    data object Alarm : Screen(route = "Alarm", iconId = R.drawable.alarm_clock)
 
     @Serializable
-    data object Clock : Screen(route = "Clock",icon  = Icons.Default.Home)
+    data object Clock : Screen(route = "Clock", iconId = R.drawable.clock)
 
     @Serializable
-    data object StopWatch : Screen(route = "Stop Watch",icon  = Icons.Default.Home)
+    data object StopWatch : Screen(route = "Stop Watch", iconId = R.drawable.timer)
 
     @Serializable
-    data object Timer : Screen(route = "Timer",icon  = Icons.Default.Home)
+    data object Timer : Screen(route = "Timer", iconId = R.drawable.stopwatch)
 }
