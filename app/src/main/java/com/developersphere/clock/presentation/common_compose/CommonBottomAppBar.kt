@@ -1,5 +1,6 @@
 package com.developersphere.clock.presentation.common_compose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,7 +38,7 @@ fun CommonBottomAppBar(navController: NavController) {
 
     Surface(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().background(color = Color(0xff282F35)),
     ) {
         NavigationBar(
             containerColor = Color(0xff363E46),
