@@ -1,18 +1,14 @@
 package com.developersphere.clock.presentation.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.developersphere.clock.R
-import com.developersphere.clock.presentation.screens.AlarmScreen
+import com.developersphere.clock.presentation.screens.alarm_screen.AlarmScreen
 import com.developersphere.clock.presentation.screens.ClockScreen
 import com.developersphere.clock.presentation.screens.StopWatchScreen
 import com.developersphere.clock.presentation.screens.TimerScreen
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Composable
