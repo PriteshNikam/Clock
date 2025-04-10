@@ -23,6 +23,11 @@ object DummyData {
         demoAlarm.copy(isActive = true),
         demoAlarm,
         demoAlarm.copy(isActive = true),
+        demoAlarm,
+        demoAlarm,
+        demoAlarm.copy(isActive = true),
+        demoAlarm,
+        demoAlarm.copy(isActive = true),
         demoAlarm
     )
 }
