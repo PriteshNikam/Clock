@@ -11,5 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 // clock app color
-val BackGroundColor = Color(0xFF363E46)
+val BackGroundColor = Color(0xff282F35)
 val BottomAppBarBackgroundColor = Color(0xFF363E46)

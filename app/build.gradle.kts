@@ -75,4 +75,8 @@ dependencies {
     // serialization
     implementation(libs.kotlin.serialization)
 
+    //
+    implementation(libs.compose.lifecycle)
+
+
 }
