@@ -1,4 +1,4 @@
-package com.developersphere.clock.presentation.screens
+package com.developersphere.clock.presentation.screens.timer_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -21,6 +21,6 @@ fun TimerScreen(){
             .fillMaxSize()
             .background(color = Color.White)
     ){
-        Text("Timer Screen", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
+        Text("Timer BottomNavRoute", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
     }
 }

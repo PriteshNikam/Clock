@@ -1,7 +1,6 @@
 package com.developersphere.clock.presentation.common_compose
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.developersphere.clock.presentation.navigation.AlarmScreenNav
-import com.developersphere.clock.presentation.navigation.Screen
+import com.developersphere.clock.presentation.navigation.routes.BottomNavRoute
 
 
 @SuppressLint("RestrictedApi")
@@ -31,10 +30,10 @@ import com.developersphere.clock.presentation.navigation.Screen
 fun CommonBottomAppBar(navController: NavController) {
 
     val bottomNavigationRoutes = listOf(
-        Screen.Alarm,
-        Screen.Clock,
-        Screen.Timer,
-        Screen.StopWatch,
+        BottomNavRoute.Alarm,
+        BottomNavRoute.Clock,
+        BottomNavRoute.Timer,
+        BottomNavRoute.StopWatch,
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -57,7 +56,7 @@ fun CommonBottomAppBar(navController: NavController) {
                     selected = isSelected,
                     onClick = {
                         navController.navigate(screen) {
-                            popUpTo(Screen.Alarm.route){
+                            popUpTo(navController.graph.findStartDestination().id){
                                 saveState = true
                             }
                             launchSingleTop = true

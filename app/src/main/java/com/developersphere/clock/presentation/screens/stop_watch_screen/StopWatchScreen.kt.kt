@@ -1,4 +1,4 @@
-package com.developersphere.clock.presentation.screens
+package com.developersphere.clock.presentation.screens.stop_watch_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +20,6 @@ fun StopWatchScreen(){
             .fillMaxSize()
             .background(color = Color.White)
     ){
-        Text("Stop Watch Screen", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
+        Text("Stop Watch BottomNavRoute", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
     }
 }
