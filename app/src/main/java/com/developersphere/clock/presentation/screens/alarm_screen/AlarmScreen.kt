@@ -3,6 +3,7 @@ package com.developersphere.clock.presentation.screens.alarm_screen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,11 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.developersphere.clock.presentation.common_compose.AlarmCardWidget
 import com.developersphere.clock.presentation.common_compose.CommonText
+import com.developersphere.clock.presentation.navigation.Screen
 import com.developersphere.clock.utils.DummyData.alarmScreenData
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AlarmScreen() {
+fun AlarmScreen(navigation:(screen:Screen)-> Unit) {
 
     val alarmScreenViewModel = AlarmScreenViewModel()
 
@@ -80,7 +82,9 @@ fun AlarmScreen() {
                         imageVector = Icons.Rounded.Add,
                         tint = Color.White,
                         contentDescription = "",
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp).clickable {
+                            navigation(Screen.CreateAlarmScreen(alarmId = 555, alarmTitle = "Dummy alarm"))
+                        }
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Icon(
@@ -103,5 +107,5 @@ fun AlarmScreen() {
 @Preview
 @Composable
 fun PreviewAlarmScreen() {
-    AlarmScreen()
+    AlarmScreen({})
 }
