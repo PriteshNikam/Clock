@@ -51,8 +51,8 @@ fun AppNavigation(navigationController: NavHostController) {
         composable<Screen.Clock> { ClockScreen() }
         composable<Screen.Timer> { TimerScreen() }
         composable<Screen.StopWatch> { StopWatchScreen() }
-        composable<Screen.CreateAlarmScreen> { navBackStackEntry ->
-            val screenData = navBackStackEntry.toRoute<Screen.CreateAlarmScreen>()
+        composable<Screen.AddAlarmScreen> { navBackStackEntry ->
+            val screenData = navBackStackEntry.toRoute<Screen.AddAlarmScreen>()
             val id = screenData.alarmId
             val alarmTitle = screenData.alarmTitle
             AddAlarmScreen(alarmId = id, alarmTitle = alarmTitle)
@@ -75,6 +75,6 @@ sealed class Screen(val route: String, val iconId: Int? = null) {
     data object Timer : Screen(route = ScreenEnum.Timer.name, iconId = R.drawable.stopwatch)
 
     @Serializable
-    data class CreateAlarmScreen(val alarmId: Int, val alarmTitle: String) :
+    data class AddAlarmScreen(val alarmId: Int, val alarmTitle: String) :
         Screen(ScreenEnum.CreateAlarmScreen.name)
 }

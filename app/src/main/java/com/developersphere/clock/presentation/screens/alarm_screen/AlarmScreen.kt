@@ -83,7 +83,7 @@ fun AlarmScreen(navigation:(screen:Screen)-> Unit) {
                         tint = Color.White,
                         contentDescription = "",
                         modifier = Modifier.size(24.dp).clickable {
-                            navigation(Screen.CreateAlarmScreen(alarmId = 555, alarmTitle = "Dummy alarm"))
+                            navigation(Screen.AddAlarmScreen(alarmId = 555, alarmTitle = "Dummy alarm"))
                         }
                     )
                     Spacer(modifier = Modifier.width(12.dp))
