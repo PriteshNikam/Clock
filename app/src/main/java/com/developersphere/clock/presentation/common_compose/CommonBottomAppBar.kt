@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.developersphere.clock.presentation.navigation.AlarmScreenNav
 import com.developersphere.clock.presentation.navigation.Screen
 
 
@@ -56,7 +57,7 @@ fun CommonBottomAppBar(navController: NavController) {
                     selected = isSelected,
                     onClick = {
                         navController.navigate(screen) {
-                            popUpTo(navController.graph.startDestinationId) {
+                            popUpTo(Screen.Alarm.route){
                                 saveState = true
                             }
                             launchSingleTop = true
