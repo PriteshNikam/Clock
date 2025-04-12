@@ -1,4 +1,4 @@
-package com.developersphere.clock.presentation.screens
+package com.developersphere.clock.presentation.screens.clock_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +20,6 @@ fun ClockScreen() {
             .fillMaxSize()
             .background(color = Color.White)
     ){
-        Text("Clock Screen", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
+        Text("Clock BottomNavRoute", style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold))
     }
 }

@@ -1,7 +1,6 @@
 package com.developersphere.clock.presentation.screens.alarm_screen
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -11,7 +10,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 class AlarmScreenViewModel: ViewModel() {
 
     private val _currentTime = MutableStateFlow(getFormattedTime())
@@ -28,7 +26,11 @@ class AlarmScreenViewModel: ViewModel() {
     }
 
     private fun getFormattedTime(): String {
-        val formatter = DateTimeFormatter.ofPattern("hh:mm:s a")
+        val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter.ofPattern("hh:mm:ss a")
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
         return LocalTime.now().format(formatter)
     }
 }
