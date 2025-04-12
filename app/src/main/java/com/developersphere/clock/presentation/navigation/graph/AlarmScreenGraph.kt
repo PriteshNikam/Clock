@@ -1,5 +1,7 @@
 package com.developersphere.clock.presentation.navigation.graph
 
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -17,48 +19,68 @@ fun NavGraphBuilder.alarmScreenGraph(navigationController: NavController) {
         startDestination = AlarmRoute.AlarmScreen,
     ) {
         composable<AlarmRoute.AlarmScreen> {
-                AlarmScreen { screen ->
-                    navigationController.navigate(screen) {
-                        popUpTo<AlarmRoute.AlarmScreen> {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                    }
-
-            }
+            RegisterAlarmScreen(navigationController)
         }
 
         composable<AlarmRoute.AddAlarmScreen> { navBackStackEntry ->
-            val screenData = navBackStackEntry.toRoute<AlarmRoute.AddAlarmScreen>()
-            val id = screenData.alarmId
-            val alarmTitle = screenData.alarmTitle
-            AddAlarmScreen(
-                alarmId = id,
-                alarmTitle = alarmTitle,
-                navigation = { destination ->
-                    if (destination != null) {
-                        navigationController.navigate(destination)
-                    } else {
-                        navigationController.popBackStack()
-                    }
-                }
-            )
+            RegisterAddAlarmScreen(navigationController, navBackStackEntry)
         }
 
         composable<AlarmRoute.DummyScreen> {
-            DummyScreen(navigation = { destination ->
-                if (destination != null) {
-                    navigationController.navigate(destination){
-                        popUpTo<AlarmRoute.AlarmScreen>{
-                            inclusive = true
-                            saveState = true
-                        }
-                    }
-                } else {
-                    navigationController.popBackStack()
-                }
-            })
+            RegisterDummyScreen(navigationController)
         }
     }
 }
+
+@Composable
+fun RegisterAlarmScreen(navigationController: NavController) {
+    AlarmScreen { screen ->
+        navigationController.navigate(screen) {
+            popUpTo<AlarmRoute.AlarmScreen> {
+                saveState = true
+            }
+            launchSingleTop = true
+        }
+
+    }
+}
+
+@Composable
+fun RegisterAddAlarmScreen(
+    navigationController: NavController,
+    navBackStackEntry: NavBackStackEntry,
+) {
+    val screenData = navBackStackEntry.toRoute<AlarmRoute.AddAlarmScreen>()
+    val id = screenData.alarmId
+    val alarmTitle = screenData.alarmTitle
+    AddAlarmScreen(
+        alarmId = id,
+        alarmTitle = alarmTitle,
+        navigation = { destination ->
+            if (destination != null) {
+                navigationController.navigate(destination)
+            } else {
+                navigationController.popBackStack()
+            }
+        }
+    )
+}
+
+@Composable
+fun RegisterDummyScreen(navigationController: NavController) {
+    DummyScreen(
+        navigation = { destination ->
+            if (destination != null) {
+                navigationController.navigate(destination) {
+                    popUpTo<AlarmRoute.AlarmScreen> {
+                        inclusive = true
+                        saveState = true
+                    }
+                }
+            } else {
+                navigationController.popBackStack()
+            }
+        })
+}
+
 
