@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 class AlarmScreenViewModel: ViewModel() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private val _currentTime = MutableStateFlow(getFormattedTime())
 
     val currentTime: MutableStateFlow<String> = _currentTime
@@ -28,7 +27,6 @@ class AlarmScreenViewModel: ViewModel() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getFormattedTime(): String {
         val formatter = DateTimeFormatter.ofPattern("hh:mm:s a")
         return LocalTime.now().format(formatter)

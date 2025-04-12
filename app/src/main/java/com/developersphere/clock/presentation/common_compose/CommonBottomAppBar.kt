@@ -1,8 +1,9 @@
 package com.developersphere.clock.presentation.common_compose
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,11 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.developersphere.clock.presentation.navigation.Screen
 
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun CommonBottomAppBar(navController: NavController) {
 
@@ -34,32 +37,37 @@ fun CommonBottomAppBar(navController: NavController) {
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination
 
     Surface(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        modifier = Modifier.fillMaxWidth().background(color = Color(0xff282F35)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color(0xff282F35)),
     ) {
         NavigationBar(
             containerColor = Color(0xff363E46),
             modifier = Modifier.fillMaxWidth()
         ) {
             bottomNavigationRoutes.forEach { screen ->
+                // Checks if the current route matches the fully qualified class name of the [screen].
+                val isSelected = currentRoute?.hierarchy?.any { it.route == screen::class.qualifiedName } == true
                 NavigationBarItem(
-                    selected = currentDestination == screen.route,
+                    selected = isSelected,
                     onClick = {
-                        if (currentDestination != screen.route) {
-                            navController.navigate(screen.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
+                        navController.navigate(screen) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     icon = {
-                        Icon(painter = painterResource(id = screen.iconId), contentDescription = screen.route)
+                        Icon(
+                            painter = painterResource(id = screen.iconId ?: 0),
+                            contentDescription = screen.route
+                        )
                     },
                     alwaysShowLabel = true,
                     label = { Text(text = screen.route) },
