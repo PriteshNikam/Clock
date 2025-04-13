@@ -99,36 +99,6 @@ fun AlarmScreen(navigation: (screen: AlarmRoute) -> Unit) {
             }
         }
 
-
-        /**
-         * this is not good for large list as this build all items
-         * */
-        item {
-            CommonText(
-                text = "Grid item with for loop",
-                textStyle = TextStyle(fontSize = 24.sp, color = Color.Green)
-            )
-        }
-        val cols = 2
-        items(alarmScreenData.chunked(cols)) { alarm ->
-            Row(modifier = Modifier.background(color = Color.Red)) {
-                for (item in alarm) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        AlarmCardWidget(item)
-                    }
-                }
-            }
-        }
-
-        /**
-         * here we gave max height
-         */
-        item {
-            CommonText(
-                text = "Grid item with LazyVerticalGrid & height",
-                textStyle = TextStyle(fontSize = 24.sp, color = Color.Green)
-            )
-        }
         item {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
