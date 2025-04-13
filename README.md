@@ -1,4 +1,5 @@
-## description implement nested scroll using LazyColumn and LazyVerticalGrid
+## description -
+implement nested scroll using LazyColumn and LazyVerticalGrid
 
 ## video -
 
