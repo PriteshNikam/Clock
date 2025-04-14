@@ -12,6 +12,10 @@ composeLifeCycle = "2.8.7"
 
 composeNavigation = "2.8.9"
 kotlinSerialization = "1.7.3"
+daggerHiltVersion = "2.51.1"
+kotlinKsp = "2.0.21-1.0.27"
+hiltNavigation = "1.2.0"
+pluginHilt = "2.48"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,10 +33,14 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
-navigation-compose = { module = "androidx.navigation:navigation-compose",version.ref = "composeNavigation"}
-kotlin-serialization = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization"}
-compose-lifecycle = {module = "androidx.lifecycle:lifecycle-runtime-compose",version.ref = "composeLifeCycle"}
+navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "composeLifeCycle" }
 
+dagger-hilt = {module = "com.google.dagger:hilt-android", version.ref = "daggerHiltVersion"}
+hilt-navigation = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation"}
+dagger-hilt-compilier = {module = "com.google.dagger:hilt-android-compiler",version.ref = "daggerHiltVersion" }
+hilt-compiler = {module = "androidx.hilt:hilt-compiler", version.ref = "hiltNavigation"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -40,4 +48,5 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "pluginHilt" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }

@@ -33,15 +33,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.developersphere.clock.presentation.common_compose.AlarmCardWidget
 import com.developersphere.clock.presentation.common_compose.CommonText
 import com.developersphere.clock.presentation.navigation.routes.AlarmRoute
 import com.developersphere.clock.utils.DummyData.alarmScreenData
 
 @Composable
-fun AlarmScreen(navigation: (screen: AlarmRoute) -> Unit) {
-
-    val alarmScreenViewModel = AlarmScreenViewModel()
+fun AlarmScreen(
+    alarmScreenViewModel: AlarmScreenViewModel = hiltViewModel(),
+    navigation: (screen: AlarmRoute) -> Unit,
+) {
 
     val currentTime by
     alarmScreenViewModel.currentTime.collectAsState()

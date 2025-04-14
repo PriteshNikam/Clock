@@ -3,14 +3,17 @@ package com.developersphere.clock.presentation.screens.alarm_screen
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class AlarmScreenViewModel: ViewModel() {
+@HiltViewModel
+class AlarmScreenViewModel @Inject constructor(): ViewModel() {
 
     private val _currentTime = MutableStateFlow(getFormattedTime())
 
