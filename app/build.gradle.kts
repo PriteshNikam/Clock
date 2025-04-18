@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp") // Use KSP instead of kapt
+    id("dagger.hilt.android.plugin") // Apply Hilt plugin
 }
 
 android {
@@ -84,6 +84,4 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.navigation)
     ksp(libs.dagger.hilt.compilier)
-    ksp(libs.hilt.compiler)
-
 }
