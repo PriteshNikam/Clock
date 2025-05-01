@@ -18,3 +18,4 @@ val LightGrey = Color(0xFFD3D3D3)
 val Green = Color.Green
 val Black = Color.Black
 val Transparent = Color.Transparent
+val Red = Color.Red
