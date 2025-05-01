@@ -1,20 +1,20 @@
 package com.developersphere.clock.utils
 
-import com.developersphere.clock.domain.enum.Days
+import com.developersphere.clock.domain.enum.Day
 import com.developersphere.clock.domain.model.AlarmData
 
 object DummyData {
     private val demoAlarm = AlarmData(
         title = "testing",
         "8:30 am",
-        onDays = mutableMapOf(
-            Days.Sunday to false,
-            Days.Monday to true,
-            Days.Tuesday to true,
-            Days.Wednesday to true,
-            Days.Thursday to true,
-            Days.Friday to true,
-            Days.Saturday to false,
+        onDay = mutableMapOf(
+            Day.Sunday to false,
+            Day.Monday to true,
+            Day.Tuesday to true,
+            Day.Wednesday to true,
+            Day.Thursday to true,
+            Day.Friday to true,
+            Day.Saturday to false,
         ),
         isActive = false
     )

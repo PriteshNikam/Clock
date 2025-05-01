@@ -1,10 +1,10 @@
 package com.developersphere.clock.domain.model
 
-import com.developersphere.clock.domain.enum.Days
+import com.developersphere.clock.domain.enum.Day
 
 data class AlarmData(
     var title: String? = null,
     var time: String? = null,
-    var onDays: MutableMap<Days, Boolean>? = null,
+    var onDay: MutableMap<Day, Boolean>? = null,
     var isActive: Boolean? = null,
 )

@@ -10,16 +10,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.developersphere.clock.domain.enum.Days
+import com.developersphere.clock.domain.enum.Day
 
 @Composable
-fun AlarmDaysWidget(onDays: MutableMap<Days, Boolean>?) {
+fun AlarmDaysWidget(onDay: MutableMap<Day, Boolean>? = null) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        onDays?.forEach { (key, value) ->
+        val days = Day.entries.associateWith { false }
+
+        (onDay ?: days).forEach { (key, value) ->
             CommonText(
                 text = key.code,
                 textStyle = TextStyle(

@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.developersphere.clock.presentation.common_compose.AlarmCardWidget
 import com.developersphere.clock.presentation.common_compose.CommonText
 import com.developersphere.clock.presentation.navigation.routes.AlarmRoute
+import com.developersphere.clock.ui.theme.BackGroundColor
+import com.developersphere.clock.ui.theme.White
 import com.developersphere.clock.utils.DummyData.alarmScreenData
 
 @Composable
@@ -48,7 +49,7 @@ fun AlarmScreen(
 
     LazyColumn(
         Modifier
-            .background(color = Color(0xff282F35))
+            .background(color = BackGroundColor)
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -88,7 +89,7 @@ fun CurrentTime(currentTime: String) {
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = FontFamily.Monospace,
-                color = Color.White,
+                color = White,
                 letterSpacing = 2.sp
             ),
             modifier = Modifier.padding(horizontal = 8.dp)
@@ -107,7 +108,7 @@ fun AddAndMoreActions(navigation: (screen: AlarmRoute) -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Rounded.Add,
-            tint = Color.White,
+            tint = White,
             contentDescription = "",
             modifier = Modifier
                 .size(24.dp)
@@ -123,7 +124,7 @@ fun AddAndMoreActions(navigation: (screen: AlarmRoute) -> Unit) {
         Spacer(modifier = Modifier.width(12.dp))
         Icon(
             imageVector = Icons.Default.MoreVert,
-            tint = Color.White,
+            tint = White,
             contentDescription = "",
             modifier = Modifier.size(24.dp)
         )

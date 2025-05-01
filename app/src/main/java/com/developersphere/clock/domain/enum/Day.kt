@@ -1,6 +1,6 @@
 package com.developersphere.clock.domain.enum
 
-enum class Days(val code: String) {
+enum class Day(val code: String) {
     Sunday(code = "S"),
     Monday(code = "M"),
     Tuesday(code = "T"),
