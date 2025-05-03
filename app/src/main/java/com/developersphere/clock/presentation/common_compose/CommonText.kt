@@ -9,11 +9,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CommonText(text:String, modifier: Modifier? = null, textStyle: TextStyle? = null) {
+fun CommonText(text:String, modifier: Modifier? = Modifier, textStyle: TextStyle? = null) {
     Text(text = text, modifier = modifier ?: Modifier, style = textStyle ?: TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        color = Color.Black,
+        color = Color.White,
     )
     )
 }

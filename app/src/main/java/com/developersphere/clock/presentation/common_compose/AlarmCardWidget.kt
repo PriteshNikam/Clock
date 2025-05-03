@@ -1,19 +1,11 @@
 package com.developersphere.clock.presentation.common_compose
 
-import android.widget.Toast
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
@@ -60,7 +52,7 @@ fun AlarmCardWidget(item: AlarmData) {
                     fontWeight = FontWeight.Medium
                 )
             )
-            AlarmDaysWidget(onDays = item.onDays)
+            AlarmDaysWidget(onDay = item.onDay)
             Spacer(modifier = Modifier.height(24.dp))
                 Switch(
                     modifier = Modifier.align(Alignment.End).scale(0.9f),

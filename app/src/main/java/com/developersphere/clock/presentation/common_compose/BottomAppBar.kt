@@ -23,6 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.developersphere.clock.presentation.navigation.routes.BottomNavRoute
+import com.developersphere.clock.ui.theme.*
 
 
 @SuppressLint("RestrictedApi")
@@ -42,11 +43,10 @@ fun CommonBottomAppBar(navController: NavController) {
     Surface(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color(0xff282F35)),
+            .fillMaxWidth().background(BackGroundColor),
     ) {
         NavigationBar(
-            containerColor = Color(0xff363E46),
+            containerColor = BottomAppBarBackgroundColor,
             modifier = Modifier.fillMaxWidth()
         ) {
             bottomNavigationRoutes.forEach { screen ->
