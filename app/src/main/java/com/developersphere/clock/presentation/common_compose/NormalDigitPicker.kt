@@ -95,7 +95,7 @@ fun NormalDigitPicker(
 
                     CommonText(
                         modifier = if (!isSelectedIndex) Modifier.alpha(0.5f) else Modifier,
-                        text = item.toString(),
+                        text = item.toString().padStart(2,'0'),
                         textStyle = if (isSelectedIndex)
                             TextStyle(
                                 fontSize = 44.sp,
