@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class StopWatchViewModel @Inject constructor(): ViewModel() {
     private var timerJob: Job? = null
     private var startTime = 0L
     private val _isRunning = MutableStateFlow(false)
-    val isRunning: MutableStateFlow<Boolean> = _isRunning
+    var isRunning: StateFlow<Boolean> = _isRunning
 
     private val _stopWatchTime = MutableStateFlow(0L)
     val time = _stopWatchTime.asStateFlow()
@@ -43,7 +44,7 @@ class StopWatchViewModel @Inject constructor(): ViewModel() {
     fun resetStopWatch(){
         timerJob?.cancel()
         _stopWatchTime.value = 0L
-        isRunning.value = false
+        _isRunning.value = false
     }
 
 }
