@@ -33,8 +33,8 @@ fun CustomButton(
                 TextStyle(
                     fontSize = 24.sp,
                     color = White,
-                    fontWeight = FontWeight.SemiBold
-                )
+                    fontWeight = FontWeight.SemiBold,
+                ),
         )
     }
 }
