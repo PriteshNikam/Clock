@@ -1,6 +1,5 @@
 package com.developersphere.clock.presentation.screens.timer_screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,28 +34,25 @@ class TimerViewModel @Inject constructor() : ViewModel() {
         _timerSecond.value = value
     }
 
-    private val _isRunning = MutableStateFlow<Boolean>(false)
+    private val _isRunning = MutableStateFlow(false)
     var isRunning: StateFlow<Boolean> = _isRunning
 
-    // total time.
-    private var totalTime =
-        (_timerHour.value * 3600) + (_timerMinute.value * 60) + _timerSecond.value
-
-    private var _timer = MutableStateFlow("00:00:00")
-    var timer: StateFlow<String> = _timer
+    private var _remainingMilliSeconds = MutableStateFlow(0)
+    val remainingMilliSeconds:StateFlow<Int> = _remainingMilliSeconds
 
     private var _job: Job? = null
 
     fun startTimer() {
         _isRunning.value = true
+        _remainingMilliSeconds.value =  (_timerHour.value * 3600) + (_timerMinute.value * 60) + _timerSecond.value
         _job = viewModelScope.launch {
             while (isActive) {
-
-                _timer.value = convertSecondsToTimeStringFormat(totalTime)
-
-                Log.d("Clock", "Ra1 timer :: ${_timer.value}")
-
-                totalTime -= 1
+                if(remainingMilliSeconds.value == 0)
+                {
+                   _isRunning.value = false
+                    break
+                }
+                _remainingMilliSeconds.value -= 1
                 delay(1000)
             }
         }
@@ -72,13 +68,6 @@ class TimerViewModel @Inject constructor() : ViewModel() {
         _timerHour.value = 0
         _timerMinute.value = 15
         _timerSecond.value = 0
-    }
-
-    private fun convertSecondsToTimeStringFormat(totalSeconds: Int): String {
-        val hour = (totalSeconds / 3600).toString().padStart(2, '0')
-        val minute = ((totalSeconds % 3600) / 60).toString().padStart(2, '0')
-        val seconds = (totalSeconds % 60).toString().padStart(2, '0')
-        return "${hour}:${minute}:${seconds}"
     }
 
 }

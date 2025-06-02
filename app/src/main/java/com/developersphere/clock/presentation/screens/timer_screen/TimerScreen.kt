@@ -1,9 +1,8 @@
 package com.developersphere.clock.presentation.screens.timer_screen
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,19 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +35,8 @@ import com.developersphere.clock.ui.theme.Green
 import com.developersphere.clock.ui.theme.LightGrey
 import com.developersphere.clock.ui.theme.Red
 import com.developersphere.clock.ui.theme.White
+import com.developersphere.clock.utils.StringFormatter
+import kotlinx.coroutines.*
 
 @Composable
 fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
@@ -48,7 +45,8 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
     val timerHour = viewModel.hour.collectAsState().value
     val timerMinute = viewModel.minute.collectAsState().value
     val timerSeconds = viewModel.second.collectAsState().value
-    val timer = viewModel.timer.collectAsState().value
+    val timer = viewModel.remainingMilliSeconds.collectAsState().value
+    val totalTime = ((timerHour * 3600) + (timerMinute * 60) + timerSeconds).toFloat()
 
     val hourList = (0..99).toList()
     val minuteList = (0..59).toList()
@@ -60,14 +58,19 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
         }
     }
 
-    var progress by rememberSaveable { mutableStateOf(false) }
+    val sweepAnim = remember { Animatable(360f) }
 
-    val animationProgress = animateFloatAsState(
-        targetValue = if (progress) 0f else 1f,
-        animationSpec = TweenSpec(10000, easing = FastOutSlowInEasing),
-        finishedListener = { progress = false },
-        label = "circularProgress"
-    )
+    LaunchedEffect(isRunning) {
+        if (isRunning && totalTime > 0) {
+
+            while (isActive && viewModel.remainingMilliSeconds.value > 0) {
+                val remaining = viewModel.remainingMilliSeconds.value.toFloat()
+                val progress = remaining / totalTime
+                sweepAnim.animateTo(progress * 360f,animationSpec = tween(50))
+                delay(16) // roughly 60fps
+            }
+        }
+    }
 
     Column(
         Modifier
@@ -98,33 +101,33 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
                 },
             )
         }
-
-        if (isRunning) {
-            Surface(
-                modifier = Modifier
-                    .size(340.dp)
-                    .align(Alignment.CenterHorizontally),
-                shape = CircleShape,
-                border = BorderStroke(2.dp, Green),
-                color = BackGroundColor,
-            ) {
-                CircularProgressIndicator(
+        else{
+            Box(contentAlignment = Alignment.Center) {
+                Canvas(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    progress = animationProgress.value
-                )
-
-                Box(contentAlignment = Alignment.Center) {
-                    CommonText(
-                        timer, textStyle = TextStyle(
-                            letterSpacing = 12.sp,
-                            fontSize = 40.sp,
-                            color = if (isRunning) Green else White,
-                            fontWeight = FontWeight.SemiBold
+                        .size(350.dp)
+                        .padding(4.dp)
+                ) {
+                    drawArc(
+                        color = Red,
+                        startAngle = 270f,
+                        sweepAngle = sweepAnim.value,
+                        useCenter = false,
+                        style = Stroke(
+                            width = 16f,
                         )
                     )
                 }
+
+                CommonText(
+                    StringFormatter.formatInHourMinuteSeconds(timer),
+                    textStyle = TextStyle(
+                        letterSpacing = 12.sp,
+                        fontSize = 40.sp,
+                        color = Green,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
             }
         }
 
@@ -134,23 +137,20 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-                CustomButton(
-                    action = {
-                        progress = true
-                        viewModel.resetTimer()
-                    },
-                    buttonTitle = "Reset",
-                    buttonColor = if (validTimer) Green else LightGrey
-                )
-
+            CustomButton(
+                action = {
+                    viewModel.resetTimer()
+                },
+                buttonTitle = "Reset",
+                buttonColor = if (validTimer) Green else LightGrey
+            )
 
             CustomButton(
                 action = {
-                    progress = true
-                    if(isRunning)
+                    if (isRunning)
                         viewModel.stopTimer()
-                        else
-                    viewModel.startTimer()
+                    else
+                        viewModel.startTimer()
                 },
                 buttonTitle = if (isRunning) "Pause" else "Start",
                 buttonColor = if (validTimer && !isRunning) Green

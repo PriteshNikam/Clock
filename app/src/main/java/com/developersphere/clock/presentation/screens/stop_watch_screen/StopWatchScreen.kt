@@ -30,7 +30,7 @@ fun StopWatchScreen(viewModel: StopWatchViewModel = hiltViewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CommonText(
-            StringFormatter.formatTimer(watch.value),
+            StringFormatter.formatTimeInMinSecMilliSec(watch.value),
             textStyle = TextStyle(
                 letterSpacing = 12.sp,
                 fontSize = 40.sp,
