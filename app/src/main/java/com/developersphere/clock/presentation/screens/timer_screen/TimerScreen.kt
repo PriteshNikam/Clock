@@ -4,43 +4,25 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.developersphere.clock.presentation.common_compose.CommonText
-import com.developersphere.clock.presentation.common_compose.CustomButton
-import com.developersphere.clock.presentation.common_compose.NormalDigitPicker
-import com.developersphere.clock.ui.theme.BackGroundColor
-import com.developersphere.clock.ui.theme.Green
-import com.developersphere.clock.ui.theme.LightGrey
-import com.developersphere.clock.ui.theme.Red
-import com.developersphere.clock.ui.theme.White
+import com.developersphere.clock.presentation.common_compose.*
+import com.developersphere.clock.ui.theme.*
 import com.developersphere.clock.utils.StringFormatter
 import kotlinx.coroutines.*
 
 @Composable
 fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
 
+    val showTimer = viewModel.showTimer.collectAsState().value
     val isRunning = viewModel.isRunning.collectAsState().value
     val timerHour = viewModel.hour.collectAsState().value
     val timerMinute = viewModel.minute.collectAsState().value
@@ -60,8 +42,8 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
 
     val sweepAnim = remember { Animatable(360f) }
 
-    LaunchedEffect(isRunning) {
-        if (isRunning && totalTime > 0) {
+    LaunchedEffect(showTimer) {
+        if (showTimer && totalTime > 0) {
 
             while (isActive && viewModel.remainingMilliSeconds.value > 0) {
                 val remaining = viewModel.remainingMilliSeconds.value.toFloat()
@@ -82,7 +64,7 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (!isRunning) {
+        if (!showTimer) {
             TimePicker(
                 hourList = hourList,
                 minuteList = minuteList,
@@ -131,33 +113,42 @@ fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
             }
         }
 
-        // start button
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CustomButton(
-                action = {
-                    viewModel.resetTimer()
-                },
-                buttonTitle = "Reset",
-                buttonColor = if (validTimer) Green else LightGrey
-            )
+        TimerButtons(viewModel,validTimer,isRunning)
+    }
+}
 
-            CustomButton(
-                action = {
+@Composable
+fun TimerButtons(viewModel: TimerViewModel, validTimer: Boolean, isRunning: Boolean) {
+    // start button
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CustomButton(
+            enabled = validTimer || isRunning,
+            action = {
+                if(validTimer)
+                viewModel.resetTimer()
+            },
+            buttonTitle = "Reset",
+            buttonColor =  BottomAppBarBackgroundColor
+        )
+
+        CustomButton(
+            action = {
+                if(validTimer) {
                     if (isRunning)
                         viewModel.stopTimer()
                     else
                         viewModel.startTimer()
-                },
-                buttonTitle = if (isRunning) "Pause" else "Start",
-                buttonColor = if (validTimer && !isRunning) Green
-                else if (isRunning) Red
-                else LightGrey
-            )
-        }
+                }
+            },
+            buttonTitle = if (isRunning) "Pause" else "Start",
+            buttonColor = if (validTimer && !isRunning) Green
+            else if (isRunning) Red
+            else LightGrey
+        )
     }
 }
 

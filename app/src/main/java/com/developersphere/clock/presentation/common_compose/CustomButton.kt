@@ -17,8 +17,10 @@ fun CustomButton(
     action: (() -> Unit),
     buttonColor: Color? = null,
     buttonTitle: String? = null,
+    enabled: Boolean = true
 ) {
     ElevatedButton(
+        enabled = enabled,
         modifier = Modifier.width(120.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = buttonColor ?: White
