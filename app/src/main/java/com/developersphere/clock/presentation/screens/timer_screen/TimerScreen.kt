@@ -128,7 +128,6 @@ fun TimerButtons(viewModel: TimerViewModel, validTimer: Boolean, isRunning: Bool
         CustomButton(
             enabled = validTimer || isRunning,
             action = {
-                if(validTimer)
                 viewModel.resetTimer()
             },
             buttonTitle = "Reset",
@@ -136,13 +135,13 @@ fun TimerButtons(viewModel: TimerViewModel, validTimer: Boolean, isRunning: Bool
         )
 
         CustomButton(
+            enabled = validTimer,
             action = {
-                if(validTimer) {
                     if (isRunning)
                         viewModel.stopTimer()
                     else
                         viewModel.startTimer()
-                }
+
             },
             buttonTitle = if (isRunning) "Pause" else "Start",
             buttonColor = if (validTimer && !isRunning) Green
