@@ -19,6 +19,7 @@ import com.developersphere.clock.ui.theme.*
 import com.developersphere.clock.utils.StringFormatter
 import kotlinx.coroutines.*
 
+// need to optimise animation.
 @Composable
 fun TimerScreen(viewModel: TimerViewModel = hiltViewModel()) {
 
