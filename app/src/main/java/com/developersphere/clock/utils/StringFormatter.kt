@@ -1,5 +1,10 @@
 package com.developersphere.clock.utils
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object StringFormatter {
@@ -16,5 +21,17 @@ object StringFormatter {
         val minute = ((timeInMilliSeconds % 3600) / 60).toString().padStart(2, '0')
         val seconds = (timeInMilliSeconds % 60).toString().padStart(2, '0')
         return "${hour}:${minute}:${seconds}"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun formatLocalTimeIntoHourMinute(localDateTime: String): String {
+        try {
+            val dateTime = LocalDateTime.parse(localDateTime)
+            val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+            return dateTime.format(formatter)
+        } catch (exception: Exception) {
+            Log.d("Clock", "Time conversion exception :: $exception")
+        }
+        return ""
     }
 }

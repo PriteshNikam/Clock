@@ -1,5 +1,7 @@
 package com.developersphere.clock.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +12,7 @@ import com.developersphere.clock.presentation.screens.clock_screen.ClockScreen
 import com.developersphere.clock.presentation.screens.stop_watch_screen.StopWatchScreen
 import com.developersphere.clock.presentation.screens.timer_screen.TimerScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(navigationController: NavHostController) {
     NavHost(navController = navigationController, startDestination = BottomNavRoute.Alarm) {
