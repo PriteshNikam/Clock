@@ -27,7 +27,7 @@ import kotlin.math.abs
 fun NormalDigitPicker(
     numberList: List<Int>,
     updateSelectedDigit: (selectedDigit: Int) -> Unit,
-    defaultSelectedDigit: Int? = 0,
+    defaultSelectedDigit: Int = 0,
     label: String? = null,
 ) {
     val repeatCount = 100
@@ -43,13 +43,11 @@ fun NormalDigitPicker(
     // LaunchedEffect to trigger initial scroll if needed (though initialFirstVisibleItemIndex should handle it)
     LaunchedEffect(listState) {
         // Potentially scroll to the initial item again if the initial placement wasn't perfect
-        if (defaultSelectedDigit != null) {
-            val targetIndex = middleIndex - (middleIndex % numberList.size) + numberList.indexOf(
-                defaultSelectedDigit
-            )
-            if (targetIndex in 1 until totalItem) {
-                listState.scrollToItem(targetIndex - 1)
-            }
+        val targetIndex = middleIndex - (middleIndex % numberList.size) + numberList.indexOf(
+            defaultSelectedDigit
+        )
+        if (targetIndex in 1 until totalItem) {
+            listState.scrollToItem(targetIndex - 1)
         }
     }
 

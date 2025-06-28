@@ -1,5 +1,7 @@
 package com.developersphere.clock.presentation.navigation.graph
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -13,6 +15,7 @@ import com.developersphere.clock.presentation.screens.DummyScreen
 import com.developersphere.clock.presentation.screens.add_alarm_screen.AddAlarmScreen
 import com.developersphere.clock.presentation.screens.alarm_screen.AlarmScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.alarmScreenGraph(navigationController: NavController) {
 
     navigation<BottomNavRoute.Alarm>(
@@ -32,6 +35,7 @@ fun NavGraphBuilder.alarmScreenGraph(navigationController: NavController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterAlarmScreen(navigationController: NavController) {
     AlarmScreen { screen ->
@@ -41,10 +45,10 @@ fun RegisterAlarmScreen(navigationController: NavController) {
             }
             launchSingleTop = true
         }
-
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterAddAlarmScreen(
     navigationController: NavController,
@@ -52,10 +56,8 @@ fun RegisterAddAlarmScreen(
 ) {
     val screenData = navBackStackEntry.toRoute<AlarmRoute.AddAlarmScreen>()
     val id = screenData.alarmId
-    val alarmTitle = screenData.alarmTitle
     AddAlarmScreen(
         alarmId = id,
-        alarmTitle = alarmTitle,
         navigation = { destination ->
             if (destination != null) {
                 navigationController.navigate(destination)

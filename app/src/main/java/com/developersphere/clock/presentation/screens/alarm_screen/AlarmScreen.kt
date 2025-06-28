@@ -1,5 +1,7 @@
 package com.developersphere.clock.presentation.screens.alarm_screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,8 +38,8 @@ import com.developersphere.clock.presentation.common_compose.CommonText
 import com.developersphere.clock.presentation.navigation.routes.AlarmRoute
 import com.developersphere.clock.ui.theme.BackGroundColor
 import com.developersphere.clock.ui.theme.White
-import com.developersphere.clock.utils.DummyData.alarmScreenData
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AlarmScreen(
     alarmScreenViewModel: AlarmScreenViewModel = hiltViewModel(),
@@ -46,6 +48,8 @@ fun AlarmScreen(
 
     val currentTime by
     alarmScreenViewModel.currentTime.collectAsState()
+
+    val alarms = alarmScreenViewModel.alarms.collectAsState()
 
     LazyColumn(
         Modifier
@@ -73,8 +77,8 @@ fun AlarmScreen(
                         max = 1000.dp
                     ),
             ) {
-                items(alarmScreenData) { alarm ->
-                    AlarmCardWidget(alarm)
+                items(alarms.value) { alarm ->
+                    AlarmCardWidget(alarm,navigation)
                 }
             }
         }
@@ -94,7 +98,6 @@ fun CurrentTime(currentTime: String) {
             ),
             modifier = Modifier.padding(horizontal = 8.dp)
         )
-
 }
 
 @Composable
@@ -114,10 +117,7 @@ fun AddAndMoreActions(navigation: (screen: AlarmRoute) -> Unit) {
                 .size(24.dp)
                 .clickable {
                     navigation(
-                        AlarmRoute.AddAlarmScreen(
-                            alarmId = 555,
-                            alarmTitle = "Dummy alarm"
-                        )
+                        AlarmRoute.AddAlarmScreen(alarmId = null)
                     )
                 }
         )
@@ -131,6 +131,7 @@ fun AddAndMoreActions(navigation: (screen: AlarmRoute) -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewAlarmScreen() {
