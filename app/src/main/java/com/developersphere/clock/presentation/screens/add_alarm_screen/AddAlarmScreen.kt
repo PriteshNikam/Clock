@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.developersphere.clock.domain.enum.Period
-import com.developersphere.clock.domain.model.AlarmData
+import com.developersphere.clock.domain.model.AlarmDataEntity
 import com.developersphere.clock.presentation.common_compose.*
 import com.developersphere.clock.presentation.navigation.routes.AlarmRoute
 import com.developersphere.clock.presentation.screens.alarm_screen.AlarmScreenViewModel
@@ -42,17 +42,17 @@ fun AddAlarmScreen(
     val hourList = (0..99).toList()
     val minuteList = (0..59).toList()
 
-    var hour = rememberSaveable { viewModel.selectedHour }
-    var minute = rememberSaveable { viewModel.selectedMinute }
-    var period = rememberSaveable { viewModel.selectedPeriod }
+    var hour = rememberSaveable { viewModel.uiState.value.selectedHour }
+    var minute = rememberSaveable { viewModel.uiState.value.selectedMinute }
+    var period = rememberSaveable { viewModel.uiState.value.selectedPeriod }
 
-    val alarm = remember { mutableStateOf(AlarmData()) }
+    val alarm = remember { mutableStateOf(AlarmDataEntity()) }
 
     LaunchedEffect(alarm.value.alarmId) {
-        alarm.value = viewModel.getAlarmById(alarmId) ?: AlarmData()
+        alarm.value = viewModel.getAlarmById(alarmId) ?: AlarmDataEntity()
         hour = alarm.value.alarmTime?.hour ?: 0
         minute = alarm.value.alarmTime?.minute ?: 0
-        period = if (hour < 12) Period.AM.period else Period.PM.period
+        period = if (hour < 12) Period.AM else Period.PM
     }
 
     Column(
@@ -67,7 +67,7 @@ fun AddAlarmScreen(
             modifier = Modifier
                 .fillMaxWidth(), horizontalArrangement = Arrangement.Start
         ) {
-            // back icon
+            // back button icon
             Icon(
                 modifier = Modifier
                     .size(42.dp)
@@ -114,7 +114,7 @@ fun AddAlarmScreen(
             PeriodPicker(
                 selectedPeriod = period,
                 onPeriodSelected = {
-                    // updateTimerPeriod(it)
+                    viewModel.updateSelectedPeriod(it)
                 }
             )
         }
@@ -128,14 +128,17 @@ fun AddAlarmScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             CustomButton(
-                action = {},
+                action = {
+                    navigation.invoke(null)
+                },
                 buttonTitle = "Cancel",
                 buttonColor = BottomAppBarBackgroundColor
             )
 
             CustomButton(
                 action = {
-                    viewModel.scheduleAlarm();
+                    viewModel.scheduleAlarm()
+                    navigation.invoke(null)
                 },
                 buttonTitle = "Save",
                 buttonColor = BottomAppBarBackgroundColor

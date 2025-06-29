@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.developersphere.clock.domain.enum.Day
 
 @Composable
-fun AlarmDaysWidget(onDay: MutableMap<Day, Boolean>? = null) {
+fun AlarmDaysWidget(onDay: Map<Day, Boolean>? = null) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

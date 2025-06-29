@@ -26,12 +26,12 @@ import kotlin.math.abs
 
 @Composable
 fun PeriodPicker(
-    selectedPeriod: String,
-    onPeriodSelected: (String) -> Unit,
+    selectedPeriod: Period,
+    onPeriodSelected: (Period) -> Unit,
 ) {
-    val periods = listOf("", Period.AM.period, Period.PM.period,"")
+    val periods = listOf("", Period.AM.period, Period.PM.period, "")
     val listState = rememberLazyListState(
-        initialFirstVisibleItemIndex = periods.indexOf(selectedPeriod).coerceAtLeast(0)
+        initialFirstVisibleItemIndex = periods.indexOf(selectedPeriod.period).coerceAtLeast(0)
     )
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
@@ -45,8 +45,16 @@ fun PeriodPicker(
         }
     }
 
+    fun stringToPeriod(value: String): Period {
+        return when (value) {
+            Period.AM.period -> Period.AM
+            Period.PM.period -> Period.PM
+            else -> Period.AM
+        }
+    }
+
     LaunchedEffect(selectedIndex) {
-        onPeriodSelected(periods[selectedIndex])
+        onPeriodSelected(stringToPeriod(periods[selectedIndex]))
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -73,4 +81,6 @@ fun PeriodPicker(
             }
         }
     }
+
+
 }

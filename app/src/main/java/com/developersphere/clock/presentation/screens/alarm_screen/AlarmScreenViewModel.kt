@@ -5,113 +5,178 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.developersphere.clock.domain.AlarmUsecase
+import com.developersphere.clock.domain.enum.Day
 import com.developersphere.clock.domain.enum.Period
-import com.developersphere.clock.domain.model.AlarmData
+import com.developersphere.clock.domain.model.AlarmDataEntity
 import com.developersphere.clock.utils.AlarmScheduler
-import com.developersphere.clock.utils.DummyData
+import com.developersphere.clock.utils.TimeConversion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+
+/*
+* TODO -
+*  handle alarm on/off
+*  handle alarm days
+*  handle alarm title
+*  handle alarm time
+*  handle alarm sound
+*  handle alarm vibrate
+*  handle alarm repeat
+*  handle alarm description
+* */
 
 @HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
-class AlarmScreenViewModel @Inject constructor(private val alarmScheduler: AlarmScheduler) :
-    ViewModel() {
+class AlarmScreenViewModel @Inject constructor(
+    private val alarmScheduler: AlarmScheduler,
+    private val alarmUsecase: AlarmUsecase,
+) : ViewModel() {
 
-    private val _currentTime = MutableStateFlow(getCurrentFormattedTime())
-
-    val currentTime: MutableStateFlow<String> = _currentTime
-
-    private val currentAlarmId = MutableStateFlow<Int?>(null)
-
-    private val _selectedHour = MutableStateFlow(6)
-
-    val selectedHour = _selectedHour.value
-
-    private val _selectedMinute = MutableStateFlow(0)
-
-    val selectedMinute = _selectedMinute.value
-
-    private val _selectedPeriod = MutableStateFlow(Period.AM.period)
-
-    val selectedPeriod = _selectedPeriod.value
-
-    private val _alarms = MutableStateFlow<List<AlarmData>>(DummyData.alarmScreenData)
-    val alarms: StateFlow<List<AlarmData>> = _alarms
+    private val _uiState = MutableStateFlow(AlarmScreenUiState())
+    var uiState: StateFlow<AlarmScreenUiState> = _uiState
 
     init {
         viewModelScope.launch {
-            while (isActive) {
-                delay(1000)
-                _currentTime.value = getCurrentFormattedTime()
+            launch {
+                alarmUsecase.getAllAlarm().collectLatest { alarmList ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            alarms = alarmList
+                        )
+                    }
+                }
+            }
+            Log.d("Clock", "Ra1 Alarm : ${_uiState.value.alarms}")
+
+            launch {
+                while (isActive) {
+                    delay(1000)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            currentTime = TimeConversion.getCurrentFormattedTime()
+                        )
+                    }
+                }
             }
         }
     }
 
-    fun getAlarmById(alarmId: Int?): AlarmData? {
-        return _alarms.value.firstOrNull { it.alarmId == alarmId }
-    }
-
-    private fun getCurrentFormattedTime(): String {
-        val formatter =
-            DateTimeFormatter.ofPattern("hh:mm:ss a")
-        return LocalTime.now().format(formatter)
+    fun getAlarmById(alarmId: Int?): AlarmDataEntity? {
+        if (alarmId != null) {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    currentAlarmId = alarmId
+                )
+            }
+            return _uiState.value.alarms.firstOrNull { it.alarmId == alarmId }
+        }
+        return null
     }
 
     fun updateSelectedHour(hour: Int) {
-        Log.d("Clock", "Ra1 Hour : $hour")
-        _selectedHour.value = hour
-    }
-
-    fun updateSelectedMinute(minute: Int) {
-        Log.d("Clock", "Ra1 Minute : $minute")
-        _selectedMinute.value = minute
-    }
-
-    fun scheduleAlarm() {
-        if(currentAlarmId.value == null){
-            createNewAlarm()
-        }else {
-            alarmScheduler.schedule(_alarms.value[currentAlarmId.value!!])
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedHour = hour
+            )
         }
     }
 
+    fun updateSelectedMinute(minute: Int) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedMinute = minute
+
+            )
+        }
+    }
+
+    fun updateSelectedPeriod(selectedPeriod: Period) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedPeriod = selectedPeriod
+            )
+        }
+    }
+
+    fun scheduleAlarm() {
+        if (_uiState.value.currentAlarmId == null) {
+            createNewAlarm()
+        } else {
+            scheduleAlarm(_uiState.value.alarms[_uiState.value.currentAlarmId!!])
+        }
+        saveAlarm()
+    }
+
+    fun scheduleAlarm(alarm: AlarmDataEntity) {
+        alarmScheduler.schedule(_uiState.value.alarms[_uiState.value.currentAlarmId!!])
+    }
+
     fun cancelAlarm(alarmId: Int) {
-        alarmScheduler.cancel(_alarms.value[alarmId])
+        alarmScheduler.cancel(_uiState.value.alarms[alarmId])
     }
 
     private fun createNewAlarm() {
-        val hour = if (_selectedPeriod.value == Period.PM.period && _selectedHour.value < 12)
-            _selectedHour.value + 12 else _selectedHour.value
+        val hour =
+            if (_uiState.value.selectedPeriod == Period.PM && _uiState.value.selectedHour < 12) _uiState.value.selectedHour + 12 else _uiState.value.selectedHour
 
-        saveAlarmTODB(
-            _selectedHour.value,
-            _selectedMinute.value,
-            _selectedPeriod.value
-        )
-
+        // schedule alarm
         alarmScheduler.schedule(
-            AlarmData(
+            AlarmDataEntity(
                 alarmId = null,
-                alarmTime = LocalDateTime.of(
-                    LocalDate.now(),
-                    LocalTime.of(hour, _selectedMinute.value),
+                alarmTime = TimeConversion.convertIntoLocalDateTime(
+                    hour, _uiState.value.selectedMinute
                 ),
-                title = "My alarm",
+                title = _uiState.value.alarmTitle,
+                onDay = _uiState.value.alarmOnDays,
+                isActive = true,
             )
         )
     }
 
-    private fun saveAlarmTODB(value: Int, value1: Int, value2: String) {
-        // TODO: save alarm to db
+    // save to Database.
+    private fun saveAlarm() {
+        viewModelScope.launch {
+            alarmUsecase.addAlarm(
+                alarmEntity = AlarmDataEntity(
+                    alarmId = _uiState.value.currentAlarmId,
+                    title = _uiState.value.alarmTitle,
+                    alarmTime = TimeConversion.convertIntoLocalDateTime(
+                        _uiState.value.selectedHour, _uiState.value.selectedMinute
+                    ),
+                    onDay = _uiState.value.alarmOnDays,
+                    isActive = true,
+                )
+            )
+        }
     }
+
+    // delete from Database.
+    fun deleteAlarm(
+        title: String,
+        hour: Int, minute: Int,
+        onDay: Map<Day, Boolean>,
+        isActive: Boolean,
+    ) {
+        viewModelScope.launch {
+            alarmUsecase.deleteAlarm(
+                alarmEntity = AlarmDataEntity(
+                    title = title,
+                    alarmTime = TimeConversion.convertIntoLocalDateTime(
+                        hour, minute
+                    ),
+                    onDay = onDay,
+                    isActive = isActive,
+                )
+            )
+        }
+    }
+
 }

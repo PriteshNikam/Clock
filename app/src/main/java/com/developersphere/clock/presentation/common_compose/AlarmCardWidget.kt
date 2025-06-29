@@ -1,6 +1,7 @@
 package com.developersphere.clock.presentation.common_compose
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -26,14 +27,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.developersphere.clock.domain.model.AlarmData
+import com.developersphere.clock.domain.model.AlarmDataEntity
 import com.developersphere.clock.presentation.navigation.routes.AlarmRoute
-import com.developersphere.clock.utils.DummyData.alarmScreenData
 import com.developersphere.clock.utils.StringFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AlarmCardWidget(item: AlarmData, navigation: (screen: AlarmRoute) -> Unit) {
+fun AlarmCardWidget(item: AlarmDataEntity, navigation: (screen: AlarmRoute) -> Unit) {
     ElevatedCard(
         modifier = Modifier
             .padding(8.dp)
@@ -92,5 +92,5 @@ fun AlarmCardWidget(item: AlarmData, navigation: (screen: AlarmRoute) -> Unit) {
 @Preview
 @Composable
 fun PreviewAlarmCard() {
-    AlarmCardWidget(item = alarmScreenData.first(), navigation = {})
+    AlarmCardWidget(item = AlarmDataEntity(), navigation = {})
 }

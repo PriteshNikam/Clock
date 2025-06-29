@@ -84,4 +84,8 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.navigation)
     ksp(libs.dagger.hilt.compilier)
+
+    // local database
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }

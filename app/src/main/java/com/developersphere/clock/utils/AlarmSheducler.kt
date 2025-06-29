@@ -6,14 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.developersphere.clock.domain.model.AlarmData
+import com.developersphere.clock.domain.model.AlarmDataEntity
 import com.developersphere.clock.utils.AppConstants.ALARM_MESSAGE
 import com.developersphere.clock.utils.AppConstants.START_ALARM
 import java.time.ZoneId
 
 interface AlarmScheduler {
-    fun schedule(alarmItem: AlarmData)
-    fun cancel(alarmItem: AlarmData)
+    fun schedule(alarmItem: AlarmDataEntity)
+    fun cancel(alarmItem: AlarmDataEntity)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -21,7 +21,7 @@ class AlarmSchedulerImpl(private val context: Context) : AlarmScheduler {
 
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
-    override fun schedule(alarmItem: AlarmData) {
+    override fun schedule(alarmItem: AlarmDataEntity) {
         val startAlarmIntent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(ALARM_MESSAGE, alarmItem.title)
             action = START_ALARM
@@ -46,7 +46,7 @@ class AlarmSchedulerImpl(private val context: Context) : AlarmScheduler {
         )
     }
 
-    override fun cancel(alarmItem: AlarmData) {
+    override fun cancel(alarmItem: AlarmDataEntity) {
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
